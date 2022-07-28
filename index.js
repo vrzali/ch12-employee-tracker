@@ -1,7 +1,7 @@
 const inquirer = require('inquirer');
 const connection = require('./db/connection');
 
-startApp = () => {
+init = () => {
     inquirer.prompt([
         {
             name: 'initialInquiry',
@@ -43,10 +43,10 @@ startApp = () => {
 };
 
 viewAllDepartments = () => {
-    connection.query(`SELECT DISTINCT department_name FROM department;`, (err, res) => {
+    connection.query(`SELECT * FROM department;`, (err, res) => {
         if (err) throw err;
         console.table(res);
-        startApp();
+        init();
     });
 };
 
@@ -54,7 +54,7 @@ viewAllRoles = () => {
     connection.query(`SELECT role.role_id, role.title, role.salary, department.department_name, department.department_id FROM role JOIN department ON role.department_id = department.department_id ORDER BY role.role_id ASC;`, (err, res) => {
         if (err) throw err;
         console.table(res);
-        startApp();
+        init();
     });
 };
 
@@ -62,25 +62,25 @@ viewAllEmployees = () => {
     connection.query(`SELECT e.employee_id, e.first_name, e.last_name, role.title, department.department_name, role.salary, CONCAT(m.first_name, ' ', m.last_name) manager FROM employee m RIGHT JOIN employee e ON e.manager_id = m.employee_id JOIN role ON e.role_id = role.role_id JOIN department ON department.department_id = role.department_id ORDER BY e.employee_id ASC;`, (err, res) => {
         if (err) throw err;
         console.table(res);
-        startApp();
+        init();
     });
 };
 
 addDepartment = () => {
     inquirer.prompt([
         {
-        name: 'newDept',
+        name: 'addDept',
         type: 'input',
-        message: 'What is the name of the department you want to add?'   
+        message: 'What is the name of the department?'   
         }
     ]).then((response) => {
         connection.query(`INSERT INTO department SET ?`, 
         {
-            department_name: response.newDept,
+            department_name: response.addDept,
         },
         (err, res) => {
             if (err) throw err;
-            console.log(`\n ${response.newDept} successfully added to database! \n`);
+            console.log(`\n ${response.addDept} successfully added to database! \n`);
             startApp();
         })
     });
@@ -99,12 +99,12 @@ addRole = () => {
             {
             name: 'salary',
             type: 'input',
-            message: 'What is the salary of the role you want to add?'   
+            message: 'What is the salary of the role?'   
             },
             {
             name: 'deptName',
             type: 'rawlist',
-            message: 'Which department do you want to add the new role to?',
+            message: 'What is the department of the role?',
             choices: departments
             },
         ]).then((response) => {
@@ -171,7 +171,7 @@ addEmployee = () => {
                 (err, res) => {
                     if (err) throw err;
                     console.log(`\n ${response.firstName} ${response.lastName} successfully added to database! \n`);
-                    startApp();
+                    init();
                 })
             })
         })
@@ -211,11 +211,11 @@ updateEmployeeRole = () => {
                 (err, res) => {
                     if (err) throw err;
                     console.log(`\n Successfully updated employee's role in the database! \n`);
-                    startApp();
+                    init();
                 })
             })
         })
     })
 };
 
-startApp();
+init();
