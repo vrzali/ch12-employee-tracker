@@ -81,7 +81,7 @@ addDepartment = () => {
         (err, res) => {
             if (err) throw err;
             console.log(`\n ${response.addDept} successfully added to database! \n`);
-            startApp();
+            init();
         })
     });
 };
@@ -117,7 +117,7 @@ addRole = () => {
             (err, res) => {
                 if (err) throw err;
                 console.log(`\n ${response.title} successfully added to database! \n`);
-                startApp();
+                init();
             })
         })
     });
