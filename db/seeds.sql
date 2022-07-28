@@ -39,4 +39,4 @@ VALUES
 ('Yuliya', 'Kalinina', 5, 7),
 ('Aygun', 'Abdulrahmanova', 7, 5),
 ('Vidadi', 'Abdulrahmanov', 8, 5),
-('Beyonce', 'Knowles', 10, 6),
+('Beyonce', 'Knowles', 10, 6);
